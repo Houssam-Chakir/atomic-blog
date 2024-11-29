@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useContext, useState } from "react";
 import { faker } from "@faker-js/faker";
 
 const PostContext = createContext();
@@ -10,6 +10,7 @@ function createRandomPost() {
   };
 }
 
+//f/ Post Provider
 function PostProvider({ children }) {
   const [posts, setPosts] = useState(() => Array.from({ length: 30 }, () => createRandomPost()));
   const [searchQuery, setSearchQuery] = useState("");
@@ -40,4 +41,10 @@ function PostProvider({ children }) {
   );
 }
 
-export { PostContext, PostProvider };
+function usePosts() {
+  const context = useContext(PostContext)
+  if (context === undefined) throw new Error('usePosts was used outside the scope of its provider')
+  return context
+}
+
+export { usePosts, PostProvider };
